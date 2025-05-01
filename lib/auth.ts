@@ -27,6 +27,9 @@ export const registerUser = async (
             password
         );
 
+        console.log('User created:', userCredential.user);
+
+        
         // Update display name
         await updateProfile(userCredential.user, {
             displayName,

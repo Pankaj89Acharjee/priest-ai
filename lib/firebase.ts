@@ -6,13 +6,13 @@ import { getStorage } from "firebase/storage";
 
 
 const firebaseConfig = {
-    apiKey: "AIzaSyDYEovAUzlOEfH19SwW_YL4dNMciXABWRk",
-    authDomain: "priest-684eb.firebaseapp.com",
-    projectId: "priest-684eb",
-    storageBucket: "priest-684eb.firebasestorage.app",
-    messagingSenderId: "369214425092",
-    appId: "1:369214425092:web:d4a80c4f9991e681f5cd51",
-    measurementId: "G-1VNZGRBST7"
+    apiKey: "AIzaSyDZ5pmQ6l-SAWiREpk8S5fXpotzPoy61qs",
+    authDomain: "priest-ai.firebaseapp.com",
+    projectId: "priest-ai",
+    storageBucket: "priest-ai.firebasestorage.app",
+    messagingSenderId: "44447008185",
+    appId: "1:44447008185:web:23bf557aa87dc2c00e2268",
+    measurementId: "G-KB3T45DLDW"
 };
 
 // Initialize Firebase
