@@ -5,7 +5,7 @@ import { useAuth } from '@/lib/authContext';
 import { motion } from 'framer-motion';
 import Image from 'next/image';
 import Link from 'next/link';
-import Navbar from '@/components/ui/Navbar';
+import NavbarMain from '@/components/ui/Navbar';
 import { HeroParallax } from '@/components/ui/hero-parallax';
 import { products } from '@/constants';
 import { ContainerScroll } from '@/components/ui/container-scroll-animation';
@@ -39,7 +39,7 @@ export default function HomePage() {
     <div className="min-h-screen bg-black text-white relative w-full">
       {/* Add the FloatingNav component */}
       {/* It will automatically handle the scroll animation */}
-      <Navbar />
+      <NavbarMain />
 
       {/* Hero Section - Adjusted for dark theme and reference style */}
       <section

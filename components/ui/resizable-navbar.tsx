@@ -25,6 +25,8 @@ interface NavBodyProps {
 interface NavItemsProps {
     items: {
         name: string;
+        title: string;
+        icon: React.ReactNode; 
         link: string;
     }[];
     className?: string;
@@ -242,7 +244,7 @@ export const NavbarLogo = () => {
                 width={30}
                 height={30}
             />
-            <span className="font-medium text-black dark:text-white">Startup</span>
+            <span className="font-medium text-black text-2xl dark:text-white">Priest</span>
         </a>
     );
 };

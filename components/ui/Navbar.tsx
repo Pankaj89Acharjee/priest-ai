@@ -16,19 +16,23 @@ import {
   IconUserPlus
 } from '@tabler/icons-react';
 
-const Navbar = () => {
+import {
+  Navbar,
+  NavBody,
+  NavItems,
+  MobileNav,
+  NavbarLogo,
+  NavbarButton,
+  MobileNavHeader,
+  MobileNavToggle,
+  MobileNavMenu,
+} from "@/components/ui/resizable-navbar";
+
+const NavbarMain = () => {
   const { user, isPriest } = useAuth();
-  const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const router = useRouter();
-
-  useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
 
   const handleLogout = () => {
     router.push('/auth/logout');
@@ -36,62 +40,116 @@ const Navbar = () => {
 
   const navItems = user ? [
     {
+      name: 'Home',
       title: 'Home',
       icon: <IconHome className="w-full h-full" />,
+      link: '/',
       href: '/'
     },
     {
+      name: 'Dashboard',
       title: 'Dashboard',
       icon: <IconDashboard className="w-full h-full" />,
+      link: isPriest ? '/dashboard/priest' : `/dashboard/${user.uid}`,
       href: isPriest ? '/dashboard/priest' : `/dashboard/${user.uid}`
     },
     {
+      name: 'Profile',
       title: 'Profile',
       icon: <IconUser className="w-full h-full" />,
+      link: '/profile',
       href: '/profile'
     },
     {
+      name: 'Logout',
       title: 'Logout',
       icon: <IconLogout className="w-full h-full" />,
+      link: '#',
       href: '#',
       onClick: handleLogout
     }
   ] : [
     {
+      name: 'Home',
       title: 'Home',
       icon: <IconHome className="w-full h-full" />,
+      link: '/',
       href: '/'
     },
     {
+      name: 'Login',
       title: 'Login',
       icon: <IconLogin className="w-full h-full" />,
+      link: '/auth/login',
       href: '/auth/login'
     },
     {
+      name: 'Register',
       title: 'Register',
       icon: <IconUserPlus className="w-full h-full" />,
+      link: '/auth/register',
       href: '/auth/register'
     }
   ];
 
   return (
     <>
-      <motion.nav
-        initial={{ y: -100 }}
-        animate={{ y: 0 }}
-        className={`fixed w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/80 backdrop-blur-md shadow-lg' : 'bg-transparent'
-          }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <Link href="/" className="flex items-center">
-              <span className={`text-2xl font-bold ${isScrolled ? 'text-gray-900' : 'text-white'}`}>
-                Priest
-              </span>
-            </Link>
-          </div>
-        </div>
-      </motion.nav>
+      <div className="absolute top-0 w-full">
+        <Navbar className="bg-gradient-to-b from-slate-900 to-neutral-900 rounded-none">
+          {/* Desktop Navigation */}
+          <NavBody>
+            <NavbarLogo />
+            <NavItems items={navItems} />
+            <div className="flex items-center gap-4">
+              <NavbarButton variant="secondary">Login</NavbarButton>
+              <NavbarButton variant="primary">Book a call</NavbarButton>
+            </div>
+          </NavBody>
+
+          {/* Mobile Navigation */}
+          <MobileNav>
+            <MobileNavHeader>
+              <NavbarLogo />
+              <MobileNavToggle
+                isOpen={isMobileMenuOpen}
+                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              />
+            </MobileNavHeader>
+
+            <MobileNavMenu
+              isOpen={isMobileMenuOpen}
+              onClose={() => setIsMobileMenuOpen(false)}
+            >
+              {navItems.map((item, idx) => (
+                <a
+                  key={`mobile-link-${idx}`}
+                  href={item.link}
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  className="relative text-neutral-600 dark:text-neutral-300"
+                >
+                  <span className="block">{item.name}</span>
+                </a>
+              ))}
+              <div className="flex w-full flex-col gap-4">
+                <NavbarButton
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="primary"
+                  className="w-full"
+                >
+                  Login
+                </NavbarButton>
+                <NavbarButton
+                  onClick={() => setIsMobileMenuOpen(false)}
+                  variant="primary"
+                  className="w-full"
+                >
+                  Book a call
+                </NavbarButton>
+              </div>
+            </MobileNavMenu>
+          </MobileNav>
+        </Navbar>
+      </div>
 
       <FloatingDock
         items={navItems}
@@ -102,4 +160,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar;
+export default NavbarMain;
