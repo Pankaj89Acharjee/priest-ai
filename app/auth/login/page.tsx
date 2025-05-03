@@ -8,16 +8,7 @@ import { useLoginStore } from '@/lib/store/loginStore';
 
 const LoginPage = () => {
   const router = useRouter();
-  const {
-    formData,
-    errors,
-    isLoading,
-    setField,
-    setLoading,
-    validateForm,
-    resetForm,
-    setError,
-  } = useLoginStore();
+  const { formData, errors, isLoading, setField, setLoading, validateForm, resetForm, setError } = useLoginStore();
 
   // Reset form when component unmounts
   useEffect(() => {
@@ -31,7 +22,7 @@ const LoginPage = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }
@@ -39,12 +30,12 @@ const LoginPage = () => {
     setLoading(true);
 
     try {
-      await signIn(formData.email, formData.password);
-      router.push('/dashboard'); // Redirect to dashboard after successful login
+      const userCredential = await signIn(formData.email, formData.password);
+      router.push(`/dashboard/${userCredential.user.uid}`); // Redirect to user-specific dashboard
     } catch (err: any) {
       // Handle Firebase specific errors
       let errorMessage = 'Failed to sign in';
-      
+
       switch (err.code) {
         case 'auth/user-not-found':
         case 'auth/wrong-password':
@@ -57,7 +48,7 @@ const LoginPage = () => {
           errorMessage = 'This account has been disabled';
           break;
       }
-      
+
       setError('email', errorMessage);
     } finally {
       setLoading(false);
@@ -81,9 +72,8 @@ const LoginPage = () => {
                 name="email"
                 type="email"
                 required
-                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                  errors.email ? 'border-red-300' : 'border-gray-300'
-                } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${errors.email ? 'border-red-300' : 'border-gray-300'
+                  } placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Email address"
                 value={formData.email}
                 onChange={handleChange}
@@ -99,9 +89,8 @@ const LoginPage = () => {
                 name="password"
                 type="password"
                 required
-                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${
-                  errors.password ? 'border-red-300' : 'border-gray-300'
-                } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
+                className={`appearance-none rounded-none relative block w-full px-3 py-2 border ${errors.password ? 'border-red-300' : 'border-gray-300'
+                  } placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 focus:z-10 sm:text-sm`}
                 placeholder="Password"
                 value={formData.password}
                 onChange={handleChange}

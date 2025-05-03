@@ -8,18 +8,20 @@ import { getUserProfile } from './auth';
 import { UserProfile } from '@/types/user';
 import { PriestProfile } from '@/types/priest';
 
-interface AuthContextType {
+export type AuthContextType = {
   user: User | null;
   profile: UserProfile | PriestProfile | null;
   loading: boolean;
   isPriest: boolean;
-}
+  clearAuth: () => void;
+};
 
 const AuthContext = createContext<AuthContextType>({
   user: null,
   profile: null,
   loading: true,
   isPriest: false,
+  clearAuth: () => {},
 });
 
 export const useAuth = () => useContext(AuthContext);
@@ -55,8 +57,14 @@ export const AuthProvider: React.FC<{ children: ReactNode }> = ({ children }) =>
     return () => unsubscribe();
   }, []);
 
+  const clearAuth = () => {
+    setUser(null);
+    setIsPriest(false);
+    setLoading(false);
+  };
+
   return (
-    <AuthContext.Provider value={{ user, profile, loading, isPriest }}>
+    <AuthContext.Provider value={{ user, profile, loading, isPriest, clearAuth }}>
       {children}
     </AuthContext.Provider>
   );
