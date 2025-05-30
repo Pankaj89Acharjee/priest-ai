@@ -36,7 +36,7 @@ export default function HomePage() {
 
   return (
     // Main container with dark background
-    <div className="min-h-screen bg-black text-white relative w-full">
+    <div className="min-h-screen bg-black text-white relative w-full pt-20">
       {/* Add the FloatingNav component */}
       {/* It will automatically handle the scroll animation */}
       <NavbarMain />
