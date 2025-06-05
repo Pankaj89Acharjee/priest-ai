@@ -29,14 +29,14 @@ WORKDIR /app
 #Copy only production dependencies from builder stage
 COPY --from=builder /app/package.json /app/package-lock.json ./
 COPY --from=builder /app/node_modules ./node_modules
-COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/next.config.ts ./
 COPY --from=builder /app/public ./public
-COPY --from=builder /app/next-env.d.ts ./next-env.d.ts
+COPY --from=builder /app/next-env.d.ts ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/tsconfig.json ./
 COPY --from=builder /app/.env* ./
-COPY --from=builder /app/postcss.config.js ./
-COPY --from=builder /app/tailwind.config.js ./
+COPY --from=builder /app/postcss.config.mjs ./
+
 
 
 #Expose the default port
