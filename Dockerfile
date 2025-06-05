@@ -21,7 +21,7 @@ RUN npm run build
 
 
 #Prune the dev dependencies to get the smaller production dependencies
-RUN npm prune --production
+#RUN npm prune --production
 
 
 
