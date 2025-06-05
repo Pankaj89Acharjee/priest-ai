@@ -1,31 +1,53 @@
-#Use Node as the base image
-FROM node:20-alpine
+#Creating a Production-Ready Dockerfile with Multi-Stage Builds
+
+#------- Stage 1: Build Stage -------
+FROM node:20-alpine AS builder
 
 #Create an app directory
 WORKDIR /app
 
-
-#Install app dependencies
+#Copy package.json and package-lock.json
 COPY package.json ./
-RUN npm install
 
 
-#Install CURL
-RUN apk update && apk add curl 
+#Install dependencies using 'npm ci' for reproducibility, it uses the exact versions in the package-lock.json file. Its faster and reliable than npm install. It removes node_modules and ensures a clean install.
+RUN npm ci
 
-
-
-#Copy all the files from the app directory into the image
+#Copy the rest of the application code
 COPY . .
 
-#Build the app
+#Build the application
 RUN npm run build
+
+
+#------- Stage 2: RUN Production Stage -------
+FROM node:20-alpine AS runner
+
+#Set the working directory
+WORKDIR /app
+
+#Copy only production dependencies from builder stage
+COPY --from=builder /app/package.json /app/package-lock.json ./
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/next.config.js ./
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/next-env.d.ts ./next-env.d.ts
+COPY --from=builder /app/.next ./.next
 
 
 #Expose the default port
 EXPOSE 3000
 
-#Start the app
+
+#set environment to the prodduction
+ENV NODE_ENV=production
+
+#Start the application
 CMD ["npm", "start"]
+
+
+
+
+
 
 
