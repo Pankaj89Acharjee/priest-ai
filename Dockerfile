@@ -7,7 +7,7 @@ FROM node:20-alpine AS builder
 WORKDIR /app
 
 #Copy package.json and package-lock.json
-COPY package.json ./
+COPY package*.json ./
 
 
 #Install dependencies using 'npm ci' for reproducibility, it uses the exact versions in the package-lock.json file. Its faster and reliable than npm install. It removes node_modules and ensures a clean install.
