@@ -20,6 +20,11 @@ COPY . .
 RUN npm run build
 
 
+#Prune the dev dependencies to get the smaller production dependencies
+RUN npm prune --production
+
+
+
 #------- Stage 2: RUN Production Stage -------
 FROM node:20-alpine AS runner
 
