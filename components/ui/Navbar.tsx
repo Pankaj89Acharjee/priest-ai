@@ -94,62 +94,60 @@ const NavbarMain = () => {
 
   return (
     <>
-      <div className="absolute top-0 w-full">
-        <Navbar className="bg-gradient-to-b from-slate-900 to-neutral-900 rounded-none">
-          {/* Desktop Navigation */}
-          <NavBody>
+      <Navbar className="rounded-none mt-3">
+        {/* Desktop Navigation */}
+        <NavBody>
+          <NavbarLogo />
+          <NavItems items={navItems} />
+          <div className="flex items-center gap-4">
+            <NavbarButton variant="secondary">Login</NavbarButton>
+            <NavbarButton variant="primary">Book a call</NavbarButton>
+          </div>
+        </NavBody>
+
+        {/* Mobile Navigation */}
+        <MobileNav>
+          <MobileNavHeader>
             <NavbarLogo />
-            <NavItems items={navItems} />
-            <div className="flex items-center gap-4">
-              <NavbarButton variant="secondary">Login</NavbarButton>
-              <NavbarButton variant="primary">Book a call</NavbarButton>
-            </div>
-          </NavBody>
-
-          {/* Mobile Navigation */}
-          <MobileNav>
-            <MobileNavHeader>
-              <NavbarLogo />
-              <MobileNavToggle
-                isOpen={isMobileMenuOpen}
-                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              />
-            </MobileNavHeader>
-
-            <MobileNavMenu
+            <MobileNavToggle
               isOpen={isMobileMenuOpen}
-              onClose={() => setIsMobileMenuOpen(false)}
-            >
-              {navItems.map((item, idx) => (
-                <a
-                  key={`mobile-link-${idx}`}
-                  href={item.link}
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="relative text-neutral-600 dark:text-neutral-300"
-                >
-                  <span className="block">{item.name}</span>
-                </a>
-              ))}
-              <div className="flex w-full flex-col gap-4">
-                <NavbarButton
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  variant="primary"
-                  className="w-full"
-                >
-                  Login
-                </NavbarButton>
-                <NavbarButton
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  variant="primary"
-                  className="w-full"
-                >
-                  Book a call
-                </NavbarButton>
-              </div>
-            </MobileNavMenu>
-          </MobileNav>
-        </Navbar>
-      </div>
+              onClick={() => setIsMobileMenuOpen(prev => !prev)}
+            />
+          </MobileNavHeader>
+
+          <MobileNavMenu
+            isOpen={isMobileMenuOpen}
+            onClose={() => setIsMobileMenuOpen(false)}
+          >
+            {navItems.map((item, idx) => (
+              <a
+                key={`mobile-link-${idx}`}
+                href={item.link}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="relative text-neutral-600 dark:text-neutral-300"
+              >
+                <span className="block">{item.name}</span>
+              </a>
+            ))}
+            <div className="flex w-full flex-col gap-4">
+              <NavbarButton
+                onClick={() => setIsMobileMenuOpen(false)}
+                variant="primary"
+                className="w-full"
+              >
+                Login
+              </NavbarButton>
+              <NavbarButton
+                onClick={() => setIsMobileMenuOpen(false)}
+                variant="primary"
+                className="w-full"
+              >
+                Book a call
+              </NavbarButton>
+            </div>
+          </MobileNavMenu>
+        </MobileNav>
+      </Navbar>
 
       <FloatingDock
         items={navItems}

@@ -36,7 +36,7 @@ export default function HomePage() {
 
   return (
     // Main container with dark background
-    <div className="min-h-screen bg-black text-white relative w-full pt-20">
+    <div className="min-h-screen dark:bg-black bg-white text-white relative w-full pt-20">
       {/* Add the FloatingNav component */}
       {/* It will automatically handle the scroll animation */}
       <NavbarMain />
@@ -57,7 +57,7 @@ export default function HomePage() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
-            className="text-4xl sm:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-neutral-50 to-neutral-400 mb-6" // Gradient text
+            className="text-4xl sm:text-6xl lg:text-7xl font-bold text-transparent bg-clip-text dark:bg-gradient-to-b from-neutral-800/8 to-neutral-700/90 mb-6 bg-slate-700" // Gradient text
           >
             Your All-in-One Priest Zone
           </motion.h1>
@@ -93,12 +93,12 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="py-20 bg-neutral-950">
+      <section className="py-20 dark:bg-neutral-950 bg-slate-200">
         <div className="flex flex-col overflow-hidden">
           <ContainerScroll
             titleComponent={
               <>
-                <h1 className="text-4xl font-semibold text-black dark:text-white">
+                <h1 className="text-4xl font-semibold text-neutral-400 dark:text-white">
                   Unleash the power of <br />
                   <span className="text-4xl md:text-[6rem] font-bold mt-1 leading-none">
                     Dashboard for Priests
@@ -123,11 +123,11 @@ export default function HomePage() {
       {/* Features Section - Adjusted for dark theme */}
       <section
         id="features" // Add ID for nav link
-        className="py-20 sm:py-32 bg-black" // Dark background
+        className="py-20 sm:py-32 dark:bg-black bg-slate-100" // Dark background
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-neutral-50 to-neutral-400 mb-4">
+            <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gray-600 dark:bg-gradient-to-b from-neutral-50 to-neutral-400 mb-4">
               Features & Benefits
             </h2>
             <p className="text-lg sm:text-xl text-neutral-400 max-w-2xl mx-auto">
@@ -136,7 +136,7 @@ export default function HomePage() {
           </div>
 
           {/* Gemini Effect */}
-          <div className="flex flex-col items-center justify-center bg-neutral-900 p-8 rounded-2xl border-neutral-400 hover:border-neutral-100 transition duration-300 shadow-lg shadow-neutral-500/20 border-2 w-full">
+          <div className="flex flex-col items-center justify-center dark:bg-neutral-900 p-8 rounded-2xl border-neutral-400 hover:border-neutral-100 transition duration-300 shadow-lg shadow-neutral-500/20 border-2 w-full">
             <GoogleGeminiEffectDemo />
           </div>
 
@@ -173,7 +173,7 @@ export default function HomePage() {
 
 
       {/* Stats Section - Adjusted for dark theme */}
-      <section className="py-20 bg-neutral-950"> {/* Slightly different dark background */}
+      <section className="py-20 dark:bg-neutral-950 bg-slate-200"> {/* Slightly different dark background */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
             {[
@@ -198,7 +198,7 @@ export default function HomePage() {
       </section>
 
       {/* CTA Section - Adjusted for dark theme */}
-      <section className="py-20 sm:py-32 bg-black">
+      <section className="py-20 sm:py-32 dark:bg-black bg-slate-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <h2 className="text-3xl sm:text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-b from-neutral-50 to-neutral-400 mb-4">
             So are you ready to book your priest and event with ease?
@@ -216,7 +216,7 @@ export default function HomePage() {
       </section>
 
       {/* Simple Footer Example */}
-      <footer className="py-8 border-t border-neutral-800 bg-black">
+      <footer className="py-8 border-t border-neutral-800 dark:bg-black bg-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-neutral-500">
           &copy; {new Date().getFullYear()} Priest. All rights reserved.
         </div>

@@ -1,30 +1,25 @@
 @import "tailwindcss";
 
+@custom-variant dark (&:is(.dark *));
+
 :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-rgb: 255, 255, 255;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.145 0 0);
   --animate-scroll: scroll var(--animation-duration, 40s) var(--animation-direction, forwards) linear infinite;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-rgb: 15, 23, 42;
-  }
+.dark {
+  --background-rgb: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
 }
 
-
-
-
+body {
+  color: rgb(var(--foreground));
+  background-color: rgb(var(--background));
+}
 
 @keyframes scroll {
   to {
     transform: translate(calc(-50% - 0.5rem));
   }
-}
-
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: rgb(var(--background-rgb));
 }

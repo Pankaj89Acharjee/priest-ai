@@ -26,7 +26,7 @@ interface NavItemsProps {
     items: {
         name: string;
         title: string;
-        icon: React.ReactNode; 
+        icon: React.ReactNode;
         link: string;
     }[];
     className?: string;
@@ -67,7 +67,7 @@ export const Navbar = ({ children, className }: NavbarProps) => {
     return (
         <motion.div
             ref={ref}
-            className={cn("fixed inset-x-0 top-0 z-50 w-full", className)}
+            className={cn("fixed inset-x-0 top-0 z-[100] w-full pl-4 pr-4 bg-none", className)}
         >
             {React.Children.map(children, (child) =>
                 React.isValidElement(child)
@@ -99,7 +99,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
                 minWidth: visible ? "800px" : "100%",
             }}
             className={cn(
-                "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-gradient-to-l from-pink-900/50 to-green-900/90 dark:bg-neutral-850/80 px-4 py-2 lg:flex",
+                "relative z-[60] mx-auto hidden w-full max-w-7xl flex-row items-center justify-between self-start rounded-full bg-gradient-to-l from-pink-900/90 to-purple-900/90 dark:bg-neutral-850/80 px-8 py-2 lg:flex",
                 className,
             )}
         >
@@ -115,7 +115,7 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
         <motion.div
             onMouseLeave={() => setHovered(null)}
             className={cn(
-                "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-600 transition duration-500 hover:text-zinc-800 lg:flex lg:space-x-2",
+                "absolute inset-0 hidden flex-1 flex-row items-center justify-center space-x-2 text-sm font-medium text-zinc-100 transition duration-500 hover:text-zinc-800 lg:flex lg:space-x-2 m-4",
                 className,
             )}
         >
@@ -123,14 +123,14 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
                 <a
                     onMouseEnter={() => setHovered(idx)}
                     onClick={onItemClick}
-                    className="relative px-4 py-2 text-neutral-600 dark:text-neutral-300"
+                    className="relative px-4 py-2 text-neutral-200 dark:text-neutral-300"
                     key={`link-${idx}`}
                     href={item.link}
                 >
                     {hovered === idx && (
                         <motion.div
                             layoutId="hovered"
-                            className="absolute inset-0 h-full w-full rounded-full bg-gray-100 dark:bg-neutral-800"
+                            className="absolute inset-0 h-full w-full rounded-full bg-gray-500 dark:bg-neutral-800"
                         />
                     )}
                     <span className="relative z-20">{item.name}</span>
@@ -160,8 +160,8 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
                 damping: 50,
             }}
             className={cn(
-                "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between bg-transparent px-0 py-2 lg:hidden",
-                visible && "bg-white/80 dark:bg-neutral-950/80",
+                "relative z-50 mx-auto flex w-full max-w-[calc(100vw-2rem)] flex-col items-center justify-between px-0 py-2 lg:hidden",
+                "bg-white/80 dark:bg-neutral-950/80",
                 className,
             )}
         >
@@ -177,7 +177,7 @@ export const MobileNavHeader = ({
     return (
         <div
             className={cn(
-                "flex w-full flex-row items-center justify-between",
+                "flex w-full flex-row items-center justify-between bg-white dark:bg-neutral-900 z-[70] isolation-isolate",
                 className,
             )}
         >
@@ -190,7 +190,6 @@ export const MobileNavMenu = ({
     children,
     className,
     isOpen,
-    onClose,
 }: MobileNavMenuProps) => {
     return (
         <AnimatePresence>
@@ -211,17 +210,38 @@ export const MobileNavMenu = ({
     );
 };
 
-export const MobileNavToggle = ({
-    isOpen,
-    onClick,
-}: {
+export const MobileNavToggle = ({ isOpen, onClick }: {
     isOpen: boolean;
     onClick: () => void;
 }) => {
-    return isOpen ? (
-        <IconX className="text-black dark:text-white" onClick={onClick} />
-    ) : (
-        <IconMenu2 className="text-black dark:text-white" onClick={onClick} />
+    return (
+        <div className="relative h-6 w-6">
+            <AnimatePresence mode="wait" initial={false}>
+                {isOpen ? (
+                    <motion.svg
+                        key="icon-x"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 text-black dark:text-white font-bold"
+                        onClick={onClick}
+                    >
+                        <IconX />
+                    </motion.svg>
+                ) : (
+                    <motion.svg
+                        key="icon-menu"
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        className="absolute inset-0 text-black dark:text-white"
+                        onClick={onClick}
+                    >
+                        <IconMenu2 />
+                    </motion.svg>
+                )}
+            </AnimatePresence>
+        </div>
     );
 };
 
@@ -237,7 +257,7 @@ export const NavbarLogo = () => {
                 width={30}
                 height={30}
             />
-            <span className="font-medium text-black text-2xl dark:text-white">Priest</span>
+            <span className="font-medium text-gray-300 text-2xl dark:text-white">Priest</span>
         </a>
     );
 };
