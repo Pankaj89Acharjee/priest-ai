@@ -42,6 +42,15 @@ const FloatingDockMobile = ({
     className?: string;
 }) => {
     const [open, setOpen] = useState(false);
+    console.log("FloatingDockMobile rendered with items:", items); // Debug log
+
+    const handleItemClick = (item: typeof items[0]) => {
+        console.log("Mobile item clicked:", item.title); // Debug log
+        if (item.onClick) {
+            item.onClick();
+        }
+    };
+
     return (
         <div className={cn("relative block md:hidden", className)}>
             <AnimatePresence>
@@ -68,7 +77,7 @@ const FloatingDockMobile = ({
                                 transition={{ delay: (items.length - 1 - idx) * 0.05 }}
                             >
                                 <button
-                                    onClick={item.onClick}
+                                    onClick={() => handleItemClick(item)}
                                     className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-50 dark:bg-neutral-900"
                                 >
                                     <div className="h-4 w-4">{item.icon}</div>
@@ -96,17 +105,31 @@ const FloatingDockDesktop = ({
     className?: string;
 }) => {
     let mouseX = useMotionValue(Infinity);
+    console.log("FloatingDockDesktop rendered with items:", items); // Debug log
+
+    const handleItemClick = (item: typeof items[0]) => {
+        console.log("Desktop item clicked:", item.title); // Debug log
+        if (item.onClick) {
+            item.onClick();
+        }
+    };
+
     return (
         <motion.div
             onMouseMove={(e) => mouseX.set(e.pageX)}
             onMouseLeave={() => mouseX.set(Infinity)}
             className={cn(
-                "mx-auto hidden h-16 items-end gap-4 rounded-2xl bg-gray-50 px-4 pb-3 md:flex dark:bg-neutral-400",
+                "mx-auto hidden h-16 items-end gap-4 rounded-2xl bg-gray-100 px-4 pb-3 md:flex dark:bg-neutral-500",
                 className,
             )}
         >
             {items.map((item) => (
-                <IconContainer mouseX={mouseX} key={item.title} {...item} />
+                <IconContainer 
+                    mouseX={mouseX} 
+                    key={item.title} 
+                    {...item} 
+                    onClick={() => handleItemClick(item)}
+                />
             ))}
         </motion.div>
     );
@@ -126,10 +149,10 @@ function IconContainer({
     onClick?: () => void;
 }) {
     let ref = useRef<HTMLDivElement>(null);
+    console.log("IconContainer rendered for:", title); // Debug log
 
     let distance = useTransform(mouseX, (val) => {
         let bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
-
         return val - bounds.x - bounds.width / 2;
     });
 
@@ -151,7 +174,7 @@ function IconContainer({
     let height = useSpring(heightTransform, {
         mass: 0.1,
         stiffness: 150,
-        damping: 12,
+        damping: 12,    
     });
 
     let widthIcon = useSpring(widthTransformIcon, {
@@ -168,40 +191,42 @@ function IconContainer({
     const [hovered, setHovered] = useState(false);
 
     const handleClick = (e: React.MouseEvent) => {
+        console.log("IconContainer click handler called for:", title); // Debug log
+        e.preventDefault();
+        e.stopPropagation();
         if (onClick) {
-            e.preventDefault();
+            console.log("Calling onClick handler for:", title); // Debug log
             onClick();
         }
     };
 
     return (
-        <a href={href} onClick={handleClick}>
+        <motion.div
+            ref={ref}
+            style={{ width, height }}
+            onMouseEnter={() => setHovered(true)}
+            onMouseLeave={() => setHovered(false)}
+            onClick={handleClick}
+            className="relative flex aspect-square items-center justify-center rounded-full bg-gray-700 dark:bg-neutral-900 cursor-pointer"
+        >
+            <AnimatePresence>
+                {hovered && (
+                    <motion.div
+                        initial={{ opacity: 0, y: 10, x: "-50%" }}
+                        animate={{ opacity: 1, y: 0, x: "-50%" }}
+                        exit={{ opacity: 0, y: 2, x: "-50%" }}
+                        className="absolute -top-8 left-1/2 w-fit rounded-md border border-gray-200 bg-gray-100 px-2 py-0.5 text-xs whitespace-pre text-neutral-700 dark:border-neutral-900 dark:bg-neutral-800 dark:text-white"
+                    >
+                        {title}
+                    </motion.div>
+                )}
+            </AnimatePresence>
             <motion.div
-                ref={ref}
-                style={{ width, height }}
-                onMouseEnter={() => setHovered(true)}
-                onMouseLeave={() => setHovered(false)}
-                className="relative flex aspect-square items-center justify-center rounded-full bg-gray-200 dark:bg-neutral-800"
+                style={{ width: widthIcon, height: heightIcon }}
+                className="flex items-center justify-center text-white"
             >
-                <AnimatePresence>
-                    {hovered && (
-                        <motion.div
-                            initial={{ opacity: 0, y: 10, x: "-50%" }}
-                            animate={{ opacity: 1, y: 0, x: "-50%" }}
-                            exit={{ opacity: 0, y: 2, x: "-50%" }}
-                            className="absolute -top-8 left-1/2 w-fit rounded-md border border-gray-200 bg-gray-100 px-2 py-0.5 text-xs whitespace-pre text-neutral-700 dark:border-neutral-900 dark:bg-neutral-800 dark:text-white"
-                        >
-                            {title}
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-                <motion.div
-                    style={{ width: widthIcon, height: heightIcon }}
-                    className="flex items-center justify-center"
-                >
-                    {icon}
-                </motion.div>
+                {icon}
             </motion.div>
-        </a>
+        </motion.div>
     );
 }

@@ -3,7 +3,7 @@
 import React, { useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { signOut } from '@/lib/auth';
+
 import { useRouter } from 'next/navigation';
 import { FloatingNavMenu } from '@/components/FloatingNavMenu';
 
@@ -24,7 +24,7 @@ const DashboardLayout = ({ children }: { children: React.ReactNode }) => {
 
   const handleSignOut = async () => {
     try {
-      await signOut();
+      await handleSignOut()
       router.push('/auth/login');
     } catch (error) {
       console.error('Error signing out:', error);

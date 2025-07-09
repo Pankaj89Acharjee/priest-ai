@@ -1,16 +1,19 @@
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
-    signOut as firebaseSignOut,
+    //signOut as firebaseSignOut,
     sendPasswordResetEmail,
     updateProfile,
     User,
     UserCredential,
+    signOut, getAuth
 } from 'firebase/auth';
 import { doc, setDoc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
 import { auth, db } from './firebase';
 import { UserProfile } from '@/types/user';
 import { PriestProfile } from '@/types/priest';
+
+const authentication = getAuth()
 
 // Register a new user
 export const registerUser = async (
@@ -27,9 +30,6 @@ export const registerUser = async (
             password
         );
 
-        console.log('User created:', userCredential.user);
-
-        
         // Update display name
         await updateProfile(userCredential.user, {
             displayName,
@@ -37,6 +37,7 @@ export const registerUser = async (
 
         // Create profile in Firestore
         await createUserProfile(userCredential.user, displayName, isPriest);
+
 
         return userCredential;
     } catch (error) {
@@ -91,7 +92,8 @@ export const createUserProfile = async (
             specializations: [],
         };
 
-        await setDoc(userRef, priestProfile);
+        const savingdoc = await setDoc(userRef, priestProfile);
+        console.log("Doc saved response", savingdoc)
     } else {
         await setDoc(userRef, baseProfile);
     }
@@ -111,12 +113,17 @@ export const signIn = async (
 };
 
 // Sign out a user
-export const signOut = async (): Promise<void> => {
+export const signOutFx = async (): Promise<void> => {
+    console.log("=== START OF SIGNOUTFX ==="); // Debug log
     try {
-        await firebaseSignOut(auth);
+        console.log("About to sign out from Firebase"); // Debug log
+        await signOut(authentication);
+        console.log("Firebase sign out completed successfully"); // Debug log
     } catch (error) {
-        console.error('Error signing out:', error);
+        console.error("Error in signOutFx:", error); // Debug log
         throw error;
+    } finally {
+        console.log("=== END OF SIGNOUTFX ==="); // Debug log
     }
 };
 

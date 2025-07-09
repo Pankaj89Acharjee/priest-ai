@@ -28,9 +28,10 @@ interface NavItemsProps {
         title: string;
         icon: React.ReactNode;
         link: string;
+        href: string;
+        onClick?: () => void;
     }[];
     className?: string;
-    onItemClick?: () => void;
 }
 
 interface MobileNavProps {
@@ -108,7 +109,7 @@ export const NavBody = ({ children, className, visible }: NavBodyProps) => {
     );
 };
 
-export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
+export const NavItems = ({ items, className }: NavItemsProps) => {
     const [hovered, setHovered] = useState<number | null>(null);
 
     return (
@@ -122,7 +123,12 @@ export const NavItems = ({ items, className, onItemClick }: NavItemsProps) => {
             {items.map((item, idx) => (
                 <a
                     onMouseEnter={() => setHovered(idx)}
-                    onClick={onItemClick}
+                    onClick={(e) => {
+                        if (item.onClick) {
+                            e.preventDefault();
+                            item.onClick();
+                        }
+                    }}
                     className="relative px-4 py-2 text-neutral-200 dark:text-neutral-300"
                     key={`link-${idx}`}
                     href={item.link}
@@ -149,9 +155,9 @@ export const MobileNav = ({ children, className, visible }: MobileNavProps) => {
                     ? "0 0 24px rgba(34, 42, 53, 0.06), 0 1px 1px rgba(0, 0, 0, 0.05), 0 0 0 1px rgba(34, 42, 53, 0.04), 0 0 4px rgba(34, 42, 53, 0.08), 0 16px 68px rgba(47, 48, 55, 0.05), 0 1px 0 rgba(255, 255, 255, 0.1) inset"
                     : "none",
                 width: visible ? "90%" : "100%",
-                paddingRight: visible ? "12px" : "0px",
-                paddingLeft: visible ? "12px" : "0px",
-                borderRadius: visible ? "4px" : "2rem",
+                paddingRight: visible ? "12px" : "11px",
+                paddingLeft: visible ? "12px" : "11px",
+                borderRadius: visible ? "4px" : "3rem",
                 y: visible ? 20 : 0,
             }}
             transition={{
@@ -248,7 +254,7 @@ export const MobileNavToggle = ({ isOpen, onClick }: {
 export const NavbarLogo = () => {
     return (
         <a
-            href="#"
+            href="/"
             className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
         >
             <img

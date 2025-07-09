@@ -28,24 +28,42 @@ import {
   MobileNavMenu,
 } from "@/components/ui/resizable-navbar";
 
+
 const NavbarMain = () => {
-  const { user, isPriest } = useAuth();
+  const { user, isPriest, clearAuth, handleSignOut } = useAuth();
+  console.log("Navbar rendered, user:", user); // Debug log for component render
+  
+ 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const router = useRouter();
 
-  const handleLogout = () => {
-    router.push('/auth/logout');
+  const handleLogout = async () => {
+    console.log("=== START OF HANDLELOGOUT ==="); // Debug log
+    try {
+      console.log("About to call handleSignOut"); // Debug log
+      await handleSignOut();
+      console.log("handleSignOut completed successfully"); // Debug log
+      console.log("About to redirect to home"); // Debug log
+      router.push('/');
+      console.log("Redirect completed"); // Debug log
+    } catch (error) {
+      console.error("Error in handleLogout:", error); // Debug log
+    } finally {
+      console.log("=== END OF HANDLELOGOUT ==="); // Debug log
+    }
   };
 
+  // if(user) {
+  //   handleLogout()
+  // }
+
+  const handleLogin = () => {
+    router.push('/auth/login')
+  }
+
+
   const navItems = user ? [
-    {
-      name: 'Home',
-      title: 'Home',
-      icon: <IconHome className="w-full h-full" />,
-      link: '/',
-      href: '/'
-    },
     {
       name: 'Dashboard',
       title: 'Dashboard',
@@ -64,24 +82,38 @@ const NavbarMain = () => {
       name: 'Logout',
       title: 'Logout',
       icon: <IconLogout className="w-full h-full" />,
-      link: '#',
-      href: '#',
-      onClick: handleLogout
+      link: '/',
+      href: '/',
+      onClick: () => {
+        console.log("Logout button clicked in navItems"); // Debug log
+        try {
+          handleLogout();
+        } catch (error) {
+          console.error("Error calling handleLogout:", error); // Debug log
+        }
+      }
     }
   ] : [
     {
-      name: 'Home',
-      title: 'Home',
-      icon: <IconHome className="w-full h-full" />,
-      link: '/',
-      href: '/'
+      name: 'Pricing',
+      title: 'Pricing',
+      icon: <IconLogin className="w-full h-full" />,
+      link: '/standardPricing',
+      href: '/standardPricing'
     },
     {
-      name: 'Login',
-      title: 'Login',
+      name: 'Best Priests',
+      title: 'Best Priests',
       icon: <IconLogin className="w-full h-full" />,
-      link: '/auth/login',
-      href: '/auth/login'
+      link: '/bestPriests',
+      href: '/bestPriests'
+    },
+    {
+      name: 'Occassion List',
+      title: 'Occassion List',
+      icon: <IconLogin className="w-full h-full" />,
+      link: '/occassions',
+      href: '/occassions'
     },
     {
       name: 'Register',
@@ -100,7 +132,7 @@ const NavbarMain = () => {
           <NavbarLogo />
           <NavItems items={navItems} />
           <div className="flex items-center gap-4">
-            <NavbarButton variant="secondary">Login</NavbarButton>
+            <NavbarButton variant="secondary" onClick={handleLogin}>Login</NavbarButton>
             <NavbarButton variant="primary">Book a call</NavbarButton>
           </div>
         </NavBody>
@@ -131,7 +163,7 @@ const NavbarMain = () => {
             ))}
             <div className="flex w-full flex-col gap-4">
               <NavbarButton
-                onClick={() => setIsMobileMenuOpen(false)}
+                onClick={handleLogin}
                 variant="primary"
                 className="w-full"
               >
@@ -149,11 +181,11 @@ const NavbarMain = () => {
         </MobileNav>
       </Navbar>
 
-      <FloatingDock
+      {/* <FloatingDock
         items={navItems}
-        desktopClassName="fixed bottom-8 left-1/2 -translate-x-1/2"
+        desktopClassName="fixed bottom-8 left-1/2 -translate-x-1/2 bg-gray-500 dark:bg-gray-200"
         mobileClassName="fixed bottom-8 right-8"
-      />
+      /> */}
     </>
   );
 };
